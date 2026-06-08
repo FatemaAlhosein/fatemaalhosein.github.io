@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatema Alhosein — Full-Stack Web Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0f1117;
+      --paper:   #f5f2ec;
+      --accent:  #1a4f7a;
+      --accent2: #c8853a;
+      --muted:   #6b6b72;
+      --rule:    #d4cfc6;
+      --serif:   'DM Serif Display', Georgia, serif;
+      --sans:    'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 4rem;
+      background: rgba(245, 242, 236, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ──────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+    }
+
+    .hero-text { animation: fadeUp 0.9s ease both; }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 44ch;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      border-radius: 2px;
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #153d5e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(26,79,122,0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+    }
+
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Hero visual side */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero-card {
+      background: var(--accent);
+      color: #fff;
+      padding: 3rem;
+      border-radius: 4px;
+      max-width: 380px;
+      width: 100%;
+      position: relative;
+      box-shadow: 12px 12px 0 var(--accent2);
+    }
+
+    .hero-card-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .stack-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .stack-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .stack-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+    }
+
+    .hero-card-footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.8rem;
+      opacity: 0.55;
+    }
+
+    /* ── SECTION BASE ──────────────────────────────────── */
+    section {
+      padding: 6rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .section-rule {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ─────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      padding: 1.75rem;
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── SKILLS ────────────────────────────────────────── */
+    #skills { background: var(--ink); color: var(--paper); max-width: 100%; padding: 6rem 4rem; }
+
+    #skills .inner { max-width: 1200px; margin: 0 auto; }
+
+    #skills .section-title { color: var(--paper); }
+    #skills .section-rule { background: var(--accent2); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-group {
+      padding: 1.75rem;
+      border: 1px solid rgba(245,242,236,0.1);
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .skill-group:hover { border-color: var(--accent2); }
+
+    .skill-group-name {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      font-size: 0.825rem;
+      padding: 0.3rem 0.7rem;
+      background: rgba(245,242,236,0.07);
+      border-radius: 2px;
+      color: rgba(245,242,236,0.8);
+    }
+
+    /* ── EXPERIENCE ────────────────────────────────────── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 2.5rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-meta { padding-top: 0.2rem; }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-company {
+      font-size: 0.875rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .timeline-role {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .timeline-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      background: rgba(26,79,122,0.08);
+      color: var(--accent);
+      border-radius: 2px;
+      font-weight: 500;
+    }
+
+    /* ── CERTIFICATIONS ────────────────────────────────── */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cert-card {
+      padding: 1.75rem;
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cert-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .cert-card:first-child::before { background: var(--accent2); }
+
+    .cert-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .cert-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      line-height: 1.4;
+    }
+
+    .cert-source {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .cert-year {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--rule);
+    }
+
+    /* ── CONTACT ───────────────────────────────────────── */
+    #contact {
+      background: var(--accent);
+      color: #fff;
+      max-width: 100%;
+      text-align: center;
+      padding: 6rem 4rem;
+    }
+
+    #contact .inner { max-width: 640px; margin: 0 auto; }
+    #contact .section-title { color: #fff; font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 1rem; }
+    #contact .section-rule { background: var(--accent2); margin: 0 auto 2.5rem; }
+
+    .contact-desc {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .contact-links a:hover { color: #fff; }
+
+    .btn-light {
+      background: #fff;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .btn-light:hover {
+      background: rgba(255,255,255,0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    /* ── FOOTER ────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 860px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 2.5rem; }
+      .hero-visual { justify-content: stretch; }
+      .hero-card { max-width: 100%; box-shadow: 6px 6px 0 var(--accent2); }
+      section { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      #skills { padding: 4rem 1.5rem; }
+      #contact { padding: 4rem 1.5rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .timeline-meta { display: flex; gap: 1rem; align-items: baseline; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Fatema Alhosein</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Full-Stack Web Developer · Edmonton, AB</p>
+      <h1 class="hero-title">Building web<br><em>experiences</em><br>that work.</h1>
+      <p class="hero-desc">
+        PHP, Python, Django, and WordPress developer with a Computer Engineering background.
+        Open to roles in Edmonton and remote opportunities worldwide.
+      </p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="https://github.com/FatemaAlhosein" target="_blank" rel="noopener" class="btn btn-outline">GitHub →</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card">
+        <p class="hero-card-label">Core Stack</p>
+        <ul class="stack-list">
+          <li><span class="stack-dot"></span>Python · Django</li>
+          <li><span class="stack-dot"></span>PHP · Laravel · WordPress</li>
+          <li><span class="stack-dot"></span>HTML · CSS · JavaScript</li>
+          <li><span class="stack-dot"></span>MySQL · REST APIs</li>
+          <li><span class="stack-dot"></span>Git · GitHub · VS Code</li>
+        </ul>
+        <p class="hero-card-footer">IBM Full Stack Certified · 2025</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="reveal">
+      <p class="section-label">About Me</p>
+      <h2 class="section-title">Developer. Problem-solver.<br>Lifelong learner.</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>
+          I'm a Full-Stack Web Developer based in Edmonton, Alberta, with a Bachelor's degree in Computer
+          Engineering from Aleppo University. I've been building and maintaining web applications since 2013,
+          working across both agency and in-house environments.
+        </p>
+        <p>
+          In 2025 I completed the IBM Full Stack Software Developer Professional Certificate, alongside
+          certifications in Python, Django, and Laravel — deepening my modern full-stack skill set. I'm
+          comfortable across the entire stack: from database design and server-side logic to clean,
+          accessible front-end interfaces.
+        </p>
+        <p>
+          I work well with AI-assisted development tools like Claude and GitHub Copilot, and I'm
+          bilingual in English and Arabic. Currently open to full-stack, backend, or web developer
+          roles in Edmonton or remotely.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card reveal">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Years of web development experience</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Professional certifications (2022–2025)</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">40%</div>
+          <div class="stat-label">Page load improvement delivered at Unitarian Commons</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Languages: English & Arabic</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="inner">
+      <div class="reveal">
+        <p class="section-label" style="color:var(--accent2)">What I Work With</p>
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="section-rule"></div>
+      </div>
+      <div class="skills-grid reveal">
+        <div class="skill-group">
+          <p class="skill-group-name">Languages</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">PHP</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">jQuery</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-name">Frameworks & CMS</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Django</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">Laravel</span>
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">Joomla</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-name">Data & APIs</p>
+          <div class="skill-tags">
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">REST APIs</span>
+            <span class="skill-tag">Django REST Framework</span>
+            <span class="skill-tag">Supabase</span>
+            <span class="skill-tag">MySQL Workbench</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-name">Tools & Dev Env</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">GitHub</span>
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">GitHub Copilot</span>
+            <span class="skill-tag">Claude</span>
+            <span class="skill-tag">Mantis</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-name">Practices</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Responsive Design</span>
+            <span class="skill-tag">Accessibility</span>
+            <span class="skill-tag">CMS Management</span>
+            <span class="skill-tag">Bug Tracking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="reveal">
+      <p class="section-label">What I've Built</p>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="certs-grid reveal">
+
+      <!-- CookSimple — featured project -->
+      <div class="cert-card" style="padding: 2rem; border-top: 3px solid var(--accent2);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+          <span style="font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);">React · Django · REST API · Cloudinary · PostgreSQL</span>
+          <div style="display:flex;gap:0.75rem;">
+            <a href="https://cooksimple.netlify.app" target="_blank"
+               style="font-size:0.8rem;color:var(--accent2);text-decoration:none;font-weight:600;">Live →</a>
+            <a href="https://github.com/FatemaAlhosein/cooksimple" target="_blank"
+               style="font-size:0.8rem;color:var(--accent);text-decoration:none;font-weight:500;">GitHub →</a>
+          </div>
+        </div>
+        <p class="cert-title" style="font-size:1.05rem;margin-bottom:0.5rem;">CookSimple</p>
+        <p style="font-size:0.875rem;color:var(--muted);line-height:1.65;">
+          Full-stack recipe manager with a virtual pantry tracker and smart ingredient-based
+          suggestions. React 19 frontend, Django REST Framework backend, Token authentication,
+          drag-and-drop kitchen with Fridge/Pantry/Freezer zones, ingredient autocomplete,
+          Cloudinary image storage, and per-user recipe ownership.
+          Deployed on Netlify + Render with Supabase PostgreSQL.
+        </p>
+      </div>
+
+      <!-- Django Task Manager -->
+      <div class="cert-card" style="padding: 2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+          <span style="font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);">Django · Python · REST API · Bootstrap</span>
+          <div style="display:flex;gap:0.75rem;">
+            <a href="https://django-task-manager-5l3y.onrender.com" target="_blank"
+               style="font-size:0.8rem;color:var(--accent2);text-decoration:none;font-weight:600;">Live →</a>
+            <a href="https://github.com/FatemaAlhosein/django-task-manager" target="_blank"
+               style="font-size:0.8rem;color:var(--accent);text-decoration:none;font-weight:500;">GitHub →</a>
+          </div>
+        </div>
+        <p class="cert-title" style="font-size:1.05rem;margin-bottom:0.5rem;">Django Task Manager</p>
+        <p style="font-size:0.875rem;color:var(--muted);line-height:1.65;">
+          Full-stack web app with user authentication, CRUD task management, priority levels,
+          recurring tasks, categories, and a REST API built with Django REST Framework.
+          Deployed on Render with PostgreSQL.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="reveal">
+      <p class="section-label">Work History</p>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-meta">
+          <p class="timeline-date">Dec 2017 – Present</p>
+          <p class="timeline-company">Unitarian Commons</p>
+        </div>
+        <div>
+          <h3 class="timeline-role">Web Developer</h3>
+          <p class="timeline-desc">
+            Maintain and improve the organization's WordPress website — managing content, navigation,
+            and feature enhancements. Wrote custom PHP and HTML that reduced page load time by 40%.
+            Integrated AI-assisted tools (Claude, GitHub Copilot) to accelerate delivery and debugging.
+          </p>
+          <div class="timeline-tags">
+            <span class="tag">WordPress</span>
+            <span class="tag">PHP</span>
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">JavaScript</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-meta">
+          <p class="timeline-date">Feb 2013 – Jun 2015</p>
+          <p class="timeline-company">OOPSystems Software Inc.</p>
+        </div>
+        <div>
+          <h3 class="timeline-role">Software Engineer</h3>
+          <p class="timeline-desc">
+            Contributed to full-cycle design and development of SOS (School Operating System) —
+            a database-driven platform built with PHP, MySQL, jQuery, HTML, and CSS.
+            Built and maintained multi-platform websites using CMS tools, consistently meeting client deadlines.
+          </p>
+          <div class="timeline-tags">
+            <span class="tag">PHP</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">jQuery</span>
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">WordPress</span>
+            <span class="tag">Joomla</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="reveal">
+      <p class="section-label">Learning & Growth</p>
+      <h2 class="section-title">Certifications</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="certs-grid reveal">
+      <div class="cert-card">
+        <span class="cert-year">2025</span>
+        <p class="cert-title">IBM Full Stack Software Developer Professional Certificate</p>
+        <p class="cert-source">Coursera</p>
+      </div>
+      <div class="cert-card">
+        <span class="cert-year">2024</span>
+        <p class="cert-title">Django Web Development</p>
+        <p class="cert-source">Online Training</p>
+      </div>
+      <div class="cert-card">
+        <span class="cert-year">2023</span>
+        <p class="cert-title">Python Programming</p>
+        <p class="cert-source">Udemy</p>
+      </div>
+      <div class="cert-card">
+        <span class="cert-year">2022</span>
+        <p class="cert-title">PHP with Laravel</p>
+        <p class="cert-source">Udemy</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="inner">
+      <h2 class="section-title reveal">Let's work<br><em style="font-style:italic">together.</em></h2>
+      <div class="section-rule reveal"></div>
+      <p class="contact-desc reveal">
+        I'm actively looking for full-stack or web developer roles in Edmonton, AB,
+        or remote opportunities. Feel free to reach out — I'd love to connect.
+      </p>
+      <div class="contact-links reveal">
+        <a href="mailto:fatema.alhosein@gmail.com">fatema.alhosein@gmail.com</a>
+        <span style="opacity:0.3">·</span>
+        <a href="https://linkedin.com/in/fatemaalhosein" target="_blank">LinkedIn</a>
+        <span style="opacity:0.3">·</span>
+        <a href="https://github.com/FatemaAlhosein" target="_blank">GitHub</a>
+        <span style="opacity:0.3">·</span>
+        <span>Edmonton, AB</span>
+      </div>
+      <a href="mailto:fatema.alhosein@gmail.com" class="btn btn-light reveal">Send me an email →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Fatema Alhosein · Built with HTML, CSS & JavaScript</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
